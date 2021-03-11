@@ -9,10 +9,12 @@ public class Attractor : MonoBehaviour
     public static List<Attractor> Attractors;
 
     public Rigidbody2D rb;
+    public string Tag;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        Tag = transform.tag;
     }
 
     private void FixedUpdate()
@@ -54,6 +56,11 @@ public class Attractor : MonoBehaviour
 
         float forceMagnitude = G * (rb.mass * rbToAttract.mass) / Mathf.Pow(distance, 2);
         Vector3 force = direction.normalized * forceMagnitude;
+
+        if(Tag == "Environment" && objToAttract.Tag == "Environment")
+        {
+            force = force / 100f;
+        }
 
         rbToAttract.AddForce(force);
     }

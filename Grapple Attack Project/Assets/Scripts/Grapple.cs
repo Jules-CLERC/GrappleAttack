@@ -11,6 +11,10 @@ public class Grapple : MonoBehaviour
     private Vector3 Target = Vector3.zero;
     public GrapState grapState = GrapState.GrapIsReadyToBeLaunched;
     private GameObject Player;
+    //object grap by the grapple
+    private GameObject ObjectGrapped = null;
+    //Position of the grapple in the ObjectGrapped
+    private Vector3 GrapPoint = Vector3.zero;
 
     public enum GrapState
     {
@@ -44,6 +48,8 @@ public class Grapple : MonoBehaviour
             }
             else
             {
+                GrapPoint = Vector3.zero;
+                ObjectGrapped = null;
                 grapState = GrapState.GrapIsReturned;
             }
         }
@@ -55,6 +61,10 @@ public class Grapple : MonoBehaviour
         {
             Rb.velocity = (GetPlayerPosition() - transform.position).normalized * SpeedGrap;
         }
+        else if(grapState == GrapState.GrapIsAnchored)
+        {
+            transform.position = ObjectGrapped.transform.position - GrapPoint;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -63,6 +73,8 @@ public class Grapple : MonoBehaviour
         if (col.gameObject.tag == "Environment" && grapState == GrapState.GrapIsLaunched)
         {
             Rb.velocity = Vector3.zero;
+            ObjectGrapped = col.gameObject;
+            GrapPoint = ObjectGrapped.transform.position - transform.position;
             grapState = GrapState.GrapIsAnchored;
         }
     }
