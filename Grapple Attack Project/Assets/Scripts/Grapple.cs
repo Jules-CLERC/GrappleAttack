@@ -15,6 +15,8 @@ public class Grapple : MonoBehaviour
     private GameObject ObjectGrapped = null;
     //Position of the grapple in the ObjectGrapped
     private Vector3 GrapPoint = Vector3.zero;
+    //Is the time of click
+    private float StartTime, EndTime;
 
     public enum GrapState
     {
@@ -28,6 +30,9 @@ public class Grapple : MonoBehaviour
     {
         Rb = GetComponent<Rigidbody2D>();
         Player = transform.parent.gameObject;
+
+        StartTime = 0f;
+        EndTime = 0f;
     }
 
     // Update is called once per frame
@@ -36,7 +41,20 @@ public class Grapple : MonoBehaviour
         //When the player click
         if (Input.GetMouseButtonDown(0))
         {
-            if(grapState == GrapState.GrapIsReadyToBeLaunched)
+            StartTime = Time.time;
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            EndTime = Time.time;
+        }
+        //if it's short click
+        if (StartTime != 0f && EndTime != 0f && EndTime - StartTime <= 0.5f)
+        {
+            Debug.Log("short");
+            StartTime = 0f;
+            EndTime = 0f;
+
+            if (grapState == GrapState.GrapIsReadyToBeLaunched)
             {
                 grapState = GrapState.GrapIsLaunched;
                 //get the position of the touch
@@ -53,6 +71,7 @@ public class Grapple : MonoBehaviour
                 grapState = GrapState.GrapIsReturned;
             }
         }
+
         if(grapState == GrapState.GrapIsReadyToBeLaunched)
         {
             transform.position = GetPlayerPosition();

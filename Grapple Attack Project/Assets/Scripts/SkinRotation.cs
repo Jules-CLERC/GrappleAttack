@@ -23,7 +23,7 @@ public class SkinRotation : MonoBehaviour
     private void ChangeSpaceShipRotation()
     {
         float angle = Vector2.Angle(RbPlayer.velocity.normalized, Vector2.right);
-        if (RbPlayer.velocity.normalized.y < 0)
+        if (RbPlayer.velocity.normalized.y < 0f)
         {
             angle = -angle;
         }

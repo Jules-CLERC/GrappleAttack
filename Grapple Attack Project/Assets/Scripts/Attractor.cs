@@ -8,7 +8,7 @@ public class Attractor : MonoBehaviour
 
     public static List<Attractor> Attractors;
 
-    public Rigidbody2D rb;
+    public Rigidbody2D rb = null;
     public string Tag;
 
     private void Start()
